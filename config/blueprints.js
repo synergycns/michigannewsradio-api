@@ -39,7 +39,8 @@ module.exports.blueprints = {
    * An optional mount path for all blueprint routes on a controller, including `rest`, `actions`, and `shortcuts`
    * @type {String}
    */
-  prefix: '/v1',
+  //prefix: '/v1',
+  prefix: '',
 
   /**
    * An optional mount path for all blueprint routes on a controller, including only `rest`
