@@ -28,7 +28,7 @@ var LOCAL_STRATEGY_CONFIG = {
  * @private
  */
 var JWT_STRATEGY_CONFIG = {
-  secretOrKey: "0dfa6bdc033dbee9d652f3a2e39d6b31df2c0e2e2aba934773161c44b8b9d81d",
+  secretOrKey: "c5bd314a6674d0780211b18ecf96c3b92d679eb99a01657bcfb4f174de206713",
   tokenBodyField: 'access_token',
   tokenQueryParameterName: 'access_token',
   authScheme: 'Bearer',
