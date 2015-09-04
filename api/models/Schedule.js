@@ -7,6 +7,7 @@
 
 module.exports = {
 
+  description: 'Schedule containing spots that should be played on specific dates at specific times',
   autoPK: true,
   autoCreatedBy: false,
 
@@ -24,6 +25,13 @@ module.exports = {
       type: 'boolean',
       required: true,
       defaultsTo: true
+    },
+    unlockedAt: {
+      type: 'datetime'
+    },
+    spots: {
+      collection: 'ScheduleSpots',
+      via: 'schedule'
     }
 
   }
