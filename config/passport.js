@@ -108,7 +108,7 @@ function _onLocalStrategyAuth(req, identifier, password, next) {
  */
 function _onJwtStrategyAuth(req, payload, next) {
   User
-    .findOne({id: payload.id})
+    .findOne({id: payload.user.id})
     .then(function (user) {
       if (!user) return next(null, null, {
         code: 'E_USER_NOT_FOUND',
