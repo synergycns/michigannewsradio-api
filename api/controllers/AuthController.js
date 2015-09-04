@@ -15,7 +15,7 @@ function _onPassportAuth(req, res, error, user, info) {
   if (!user) return res.unauthorized(null, info && info.code, info && info.message);
 
   return res.ok({
-    token: CipherService.jwt.encodeSync({user: user, permissions: user.permissions}),
+    token: CipherService.jwt.encodeSync({user: user}),
     user: user
   });
 }
@@ -39,7 +39,7 @@ module.exports = {
       .create(values)
       .then(function (user) {
         return {
-          token: CipherService.jwt.encodeSync({user: user, permissions: user.permissions}),
+          token: CipherService.jwt.encodeSync({user: user}),
           user: user
         };
       })
@@ -71,7 +71,7 @@ module.exports = {
     var oldDecoded = CipherService.jwt.decodeSync(req.param('token'));
 
     res.ok({
-      token: CipherService.jwt.encodeSync({user: oldDecoded.user, permissions: oldDecoded.permissions})
+      token: CipherService.jwt.encodeSync({user: oldDecoded.user})
     });
   }
 };
