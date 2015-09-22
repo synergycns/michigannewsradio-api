@@ -26,16 +26,28 @@ module.exports = function (req, res) {
   var sort = actionUtil.parseSort(req);
   var findQuery = _.reduce(_.intersection(populate, takeAliases(Model.associations)), populateAliases, Model.find().where(where).limit(limit).skip(skip).sort(sort));
   var countQuery = Model.count(where);
+  var totalQuery = Model.count();
 
-  Promise.all([findQuery, countQuery])
-    .spread(function (_records, _count) {
+  Promise.all([findQuery, countQuery, totalQuery])
+    .spread(function (_records, _count, _total) {
       var records = fields.length > 0 ? _.map(_records, _.partial(_.pick, _, fields)) : _records;
+      if (req._sails.hooks.pubsub && req.isSocket) {
+        Model.subscribe(req, records);
+        if (req.options.autoWatch) { Model.watch(req); }
+          // Also subscribe to instances of all associated models
+          _.each(records, function (record) {
+          actionUtil.subscribeDeep(req, record);
+        });
+      }
       return [records, null, null, {
         criteria: where,
         limit: limit,
         start: skip,
         end: skip + limit,
-        total: _count
+        total: _count,
+        draw: 1,
+        recordsTotal: _total,
+        recordsFiltered: _count
       }];
     })
     .spread(res.ok)

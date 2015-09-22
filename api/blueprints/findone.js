@@ -24,7 +24,15 @@ module.exports = function (req, res) {
   findQuery
     .then(function (_record) {
       var record = fields.length > 0 ? _.pick(_record, fields) : _record;
-      return record ? res.ok(record) : res.notFound();
+      if (record) {
+        if (sails.hooks.pubsub && req.isSocket) {
+          Model.subscribe(req, record);
+          actionUtil.subscribeDeep(req, record);
+        }
+        return res.ok(record);
+      } else {
+        return res.notFound();
+      }
     })
     .catch(res.serverError);
 };

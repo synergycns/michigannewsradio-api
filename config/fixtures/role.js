@@ -6,8 +6,8 @@ var Promise = require('bluebird');
  */
 exports.create = function () {
   return Promise.all([
-    Role.findOrCreate({ name: 'admin' }, { name: 'admin' }),
-    Role.findOrCreate({ name: 'registered' }, { name: 'registered' }),
-    Role.findOrCreate({ name: 'public' }, { name: 'public' })
+    Role.findOrCreate({ name: 'Administrator' }, { name: 'Administrator' }),
+    Role.findOrCreate({ name: 'User' }, { name: 'User' }),
+    Role.findOrCreate({ name: 'Public' }, { name: 'Public' })
   ]);
 };

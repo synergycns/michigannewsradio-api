@@ -50,7 +50,10 @@ function initializeFixtures (sails) {
       this.models = models;
 
       sails.hooks['sails-permissions']._modelCache = _.indexBy(models, 'identity');
-
+      return require('../../config/fixtures/navigationitem').create(this.models);
+    })
+    .then(function (navigationitems) {
+      this.navigationitems = navigationitems;
       return require('../../config/fixtures/role').create();
     })
     .then(function (roles) {
@@ -69,6 +72,9 @@ function initializeFixtures (sails) {
     })
     .then(function (admin) {
       return require('../../config/fixtures/permission').create(this.roles, this.models, admin);
+    })
+    .then(function() {
+      return require('../../config/fixtures/market').create(this.models);
     })
     .catch(function (error) {
       sails.log.error(error);

@@ -13,6 +13,14 @@ module.exports = {
 
   attributes: {
 
+    advertiser: {
+      type: 'string',
+      required: true
+    },
+    commercial: {
+      model: 'Commercial',
+      required: true
+    },
     date: {
       type: 'date',
       required: true

@@ -1,28 +1,28 @@
 var Promise = require('bluebird');
 
 var grants = {
-  admin: [
+  Administrator: [
     { action: 'create' },
     { action: 'read' },
     { action: 'update' },
     { action: 'delete' }
   ],
-  registered: [
+  User: [
     { action: 'create' },
     { action: 'read' }
   ],
-  public: [
+  Public: [
     { action: 'read' }
   ]
 };
 
 var modelRestrictions = {
-  registered: [
+  User: [
     'Role',
     'Permission',
     'User'
   ],
-  public: [
+  Public: [
     'Role',
     'Permission',
     'User',
@@ -47,11 +47,11 @@ exports.create = function (roles, models, admin) {
 };
 
 function grantAdminPermissions (roles, models, admin) {
-  var adminRole = _.find(roles, { name: 'admin' });
+  var adminRole = _.find(roles, { name: 'Administrator' });
   var permissions = _.flatten(_.map(models, function (modelEntity) {
     var model = sails.models[modelEntity.identity];
 
-    return _.map(grants.admin, function (permission) {
+    return _.map(grants.Administrator, function (permission) {
       var newPermission = {
         model: modelEntity.id,
         action: permission.action,
@@ -65,7 +65,7 @@ function grantAdminPermissions (roles, models, admin) {
 }
 
 function grantRegisteredPermissions (roles, models, admin) {
-  var registeredRole = _.find(roles, { name: 'registered' });
+  var registeredRole = _.find(roles, { name: 'User' });
   var permissions = [
     {
       model: _.find(models, { name: 'Permission' }).id,

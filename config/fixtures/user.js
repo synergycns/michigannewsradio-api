@@ -24,7 +24,7 @@ exports.create = function (roles, userModel) {
           firstName: 'API',
           lastName: 'Administrator',
           email: sails.config.permissions.adminEmail,
-          roles: [ _.find(roles, { name: 'admin' }).id ],
+          roles: [ _.find(roles, { name: 'Administrator' }).id ],
           createdBy: 1,
           owner: 1,
           model: userModel.id

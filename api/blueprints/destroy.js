@@ -12,8 +12,22 @@ module.exports = function (req, res) {
 
   Model
     .destroy(PK)
-    .then(function (records) {
-      return records[0] ? res.ok(records[0]) : res.notFound();
+    .then(function (record) {
+      if(record) {
+        if (sails.hooks.pubsub) {
+          //Model.publishDestroy(PK, req, { previous: record });
+          Model.publishDestroy(PK, !req.options.mirror && req, record);
+          if (req.isSocket) {
+            Model.unsubscribe(req, record);
+            Model.retire(record);
+          }
+        }
+        return res.ok(record);
+      }
+      else
+      {
+        return res.notFound();
+      }
     })
     .catch(res.serverError);
 };

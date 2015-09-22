@@ -7,13 +7,13 @@
 
 module.exports = {
 
-  description: 'Individual Audio Files',
-  autoCreatedBy: false,
+  description: 'Commercials to be used with distribution & affidavits',
   autoPK: true,
 
   attributes: {
     file: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
     name: {
       type: 'string',
@@ -21,26 +21,15 @@ module.exports = {
       unique: true,
       index: true
     },
-    caption: {
-      type: 'string',
-      required: true
+    markets: {
+      collection: 'Market',
+      via: 'commercials'
     },
-    description: {
-      type: 'text',
-      required: true
-    },
-    length: {
+    materialCode: {
       type: 'string',
       required: true,
-      size: 8
-    },
-    category: {
-      model: 'AudioCategory',
-      required: true
-    },
-    feed: {
-      model: 'AudioFeed',
-      required: true
+      unique: true,
+      index: true
     }
   }
 

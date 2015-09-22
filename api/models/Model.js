@@ -25,6 +25,15 @@ module.exports = {
     attributes: {
       type: 'json'
     },
+    columns: {
+      type: 'array'
+    },
+    formschema: {
+      type: 'json'
+    },
+    settings: {
+      type: 'json'
+    },
     permissions: {
       collection: 'Permission',
       via: 'model'

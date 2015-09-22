@@ -78,7 +78,15 @@ module.exports = {
    * @param options.user
    */
   findModelPermissions: function(options) {
-    var action = PermissionService.getMethod(options.method);
+    var action;
+    if(options.method) {
+       action = PermissionService.getMethod(options.method);
+    }
+    else
+    {
+      action = options.action;
+    }
+
     var permissionCriteria = {
       model: options.model.id,
       action: action

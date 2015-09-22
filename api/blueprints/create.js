@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
 
 /**
@@ -12,6 +13,17 @@ module.exports = function (req, res) {
 
   Model
     .create(values)
-    .then(res.created)
+    .then(function(newInstance) {
+      // If we have the pubsub hook, use the model class's publish method
+      // to notify all subscribers about the created item
+      if (req._sails.hooks.pubsub) {
+        if (req.isSocket) {
+          Model.subscribe(req, newInstance);
+          Model.introduce(newInstance);
+        }
+        Model.publishCreate(newInstance, !req.options.mirror && req);
+      }
+      return res.created();
+    })
     .catch(res.serverError);
 };

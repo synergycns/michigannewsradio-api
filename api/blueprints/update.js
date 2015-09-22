@@ -12,10 +12,27 @@ module.exports = function (req, res) {
   var PK = actionUtil.requirePk(req);
   var values = actionUtil.parseValues(req);
 
-  Model
-    .update(PK, _.omit(values, 'id'))
-    .then(function (records) {
-      return records[0] ? res.ok(records[0]) : res.serverError();
+  Model.findOne(PK)
+    .then(function(matchingRecord) {
+      Model
+        .update(PK, _.omit(values, 'id'))
+        .then(function (records) {
+          if(records[0]) {
+            // If we have the pubsub hook, use the Model's publish method
+            // to notify all subscribers about the update.
+            if (req._sails.hooks.pubsub) {
+              if (req.isSocket) { Model.subscribe(req, records); }
+              Model.publishUpdate(PK, _.cloneDeep(values), !req.options.mirror && req, {
+                previous: matchingRecord.toJSON()
+              });
+            }
+            res.ok(records[0]);
+          } else {
+            res.serverError();
+          }
+        })
+        .catch(res.serverError);
     })
     .catch(res.serverError);
+
 };

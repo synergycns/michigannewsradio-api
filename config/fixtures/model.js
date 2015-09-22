@@ -15,7 +15,10 @@ exports.createModels = function () {
     return model && model.globalId && model.identity && {
       name: model.globalId,
       identity: model.identity,
-      attributes: _.omit(model.attributes, _.functions(model.attributes))
+      attributes: _.omit(model.attributes, _.functions(model.attributes)),
+      columns: model.columns,
+      formschema: model.formschema,
+      settings: model.settings
     };
   }));
 
