@@ -29,6 +29,10 @@ module.exports = {
       type: 'string',
       required: true
     },
+    queued: {
+      type: 'boolean',
+      defaultsTo: false
+    },
     category: {
       model: 'AudioCategory',
       required: true

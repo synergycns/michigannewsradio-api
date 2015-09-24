@@ -23,7 +23,7 @@ module.exports = function (req, res) {
         }
         Model.publishCreate(newInstance, !req.options.mirror && req);
       }
-      return res.created();
+      return res.created(newInstance);
     })
     .catch(res.serverError);
 };

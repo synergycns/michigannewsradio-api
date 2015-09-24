@@ -26,6 +26,10 @@ module.exports = {
       unique: true,
       index: true
     },
+    outputFTPFolder: {
+      type: 'string',
+      required: true
+    },
     feeds: {
       collection: 'AudioFeed',
       via: 'category'
