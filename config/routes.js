@@ -6,6 +6,6 @@
 
 module.exports.routes = {
   'get /': 'PingController.index',
-  'post /audioFile/:id/upload': 'AudioFileController.upload',
+  'post /contentFile/:id/upload': 'ContentFileController.upload',
   'get /user/:id/permission/:modelid/:action': 'UserController.permission'
 };

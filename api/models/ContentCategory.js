@@ -1,5 +1,5 @@
 /**
-* AudioCategory.js
+* ContentCategory.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  description: 'Categories of Audio Content',
+  description: 'Categories of Content',
   autoPK: true,
   attributes: {
     name: {
@@ -43,11 +43,11 @@ module.exports = {
       required: true
     },
     feeds: {
-      collection: 'AudioFeed',
+      collection: 'ContentFeed',
       via: 'category'
     },
     files: {
-      collection: 'AudioFile',
+      collection: 'ContentFile',
       via: 'category'
     }
   }

@@ -1,5 +1,5 @@
 /**
-* AudioFeed.js
+* ContentFeed.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
@@ -7,13 +7,9 @@
 
 module.exports = {
 
-  description: 'Feeds/groups of Audio Files',
+  description: 'Feeds/groups of Content Files',
   autoCreatedBy: false,
   autoPK: true,
-  settings: {
-    sortfield: 'createdAt',
-    sortdirection: 'DESC'
-  },
   attributes: {
     name: {
       type: 'string',
@@ -34,11 +30,11 @@ module.exports = {
       defaultsTo: false
     },
     category: {
-      model: 'AudioCategory',
+      model: 'ContentCategory',
       required: true
     },
     files: {
-      collection: 'AudioFile',
+      collection: 'ContentFile',
       via: 'feed'
     }
   },
@@ -71,7 +67,7 @@ module.exports = {
   ],
   formschema: {
     type: 'object',
-    title: 'Audio Feed',
+    title: 'Content Feed',
     properties: {
       name: {
         title: 'Name',
@@ -110,7 +106,7 @@ module.exports = {
           type: 'strapselect',
           options: {
             httpGet: {
-              url: 'USE_API:audiocategory'
+              url: 'USE_API:contentcategory'
             },
             map: {
               nameProperty: 'name',

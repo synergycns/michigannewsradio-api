@@ -1,5 +1,5 @@
 /**
- * AudioFeed.js
+ * ContentFile.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/#!documentation/models
@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  description: 'Individual Audio Files',
+  description: 'Individual Content Files',
   autoCreatedBy: false,
   autoPK: true,
 
@@ -36,10 +36,10 @@ module.exports = {
       size: 8
     },
     category: {
-      model: 'AudioCategory'
+      model: 'ContentCategory'
     },
     feed: {
-      model: 'AudioFeed'
+      model: 'ContentFeed'
     }
   }
 

@@ -49,7 +49,7 @@ module.exports = {
       size: 2
     },
     file: {
-      model: 'AudioFile',
+      model: 'ContentFile',
       required: true
     },
     schedule: {

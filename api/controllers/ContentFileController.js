@@ -1,7 +1,7 @@
 /**
- * AudioFileController
+ * ContentFileController
  *
- * @description :: Server-side logic for managing Audiofiles
+ * @description :: Server-side logic for managing content files
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
@@ -9,21 +9,21 @@ var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
 module.exports = {
 	upload: function(req, res) {
     var PK = actionUtil.requirePk(req);
-    AudioFile.findOne({id: PK})
-      .then(function(audioFile) {
+    ContentFile.findOne({id: PK})
+      .then(function(contentFile) {
         var d = new Date();
         var bucket = 'mnraudio';
-        var file = d.getFullYear + '/' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getHours() + '/' + req.file('audioFile').filename;
+        var file = d.getFullYear + '/' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getHours() + '/' + req.file('contentFile').filename;
         StorageService
-          .upload(req.file('audioFile'), bucket + ':' + file)
+          .upload(req.file('contentFile'), bucket + ':' + file)
           .then(function(uploadRes) {
             sails.log.info('Uploaded file: ' + uploadRes);
-            audioFile.file = file;
-            audioFile.save()
-              .then(function(audioFile) {
+            contentFile.file = file;
+            contentFile.save()
+              .then(function(contentFile) {
                 return res.ok({
                   upload: uploadRes,
-                  audioFile: audioFile
+                  contentFile: contentFile
                 });
               })
           })
@@ -33,7 +33,7 @@ module.exports = {
           })
       })
       .catch(function(e) {
-        return res.badRequest(null, null, 'Could not find the Audio File specified!');
+        return res.badRequest(null, null, 'Could not find the Content File specified!');
       })
 
   }
