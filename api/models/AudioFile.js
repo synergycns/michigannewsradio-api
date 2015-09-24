@@ -13,7 +13,8 @@ module.exports = {
 
   attributes: {
     file: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
     name: {
       type: 'string',
@@ -35,12 +36,10 @@ module.exports = {
       size: 8
     },
     category: {
-      model: 'AudioCategory',
-      required: true
+      model: 'AudioCategory'
     },
     feed: {
-      model: 'AudioFeed',
-      required: true
+      model: 'AudioFeed'
     }
   }
 
