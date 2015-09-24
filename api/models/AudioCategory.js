@@ -26,6 +26,12 @@ module.exports = {
       ],
       defaultsTo: 'audio'
     },
+    qid: {
+      type: 'number',
+      required: true,
+      unique: true,
+      index: true
+    },
     breakType: {
       type: 'string',
       required: true,
