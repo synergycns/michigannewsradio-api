@@ -38,9 +38,12 @@ module.exports = {
       unique: true,
       index: true
     },
-    outputFTPFolder: {
+    outputFolder: {
       type: 'string',
       required: true
+    },
+    legacyOutputFolder: {
+      type: 'string'
     },
     feeds: {
       collection: 'ContentFeed',
