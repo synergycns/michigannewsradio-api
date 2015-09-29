@@ -25,9 +25,5 @@ module.exports.connections = {
     database: process.env.MYSQL_DBNAME,
     charset: 'utf8',
     collation: 'utf8_swedish_ci'
-  },
-  datatable: {
-    adapter: 'sails-datatable'
   }
-
 };
