@@ -8,6 +8,7 @@
   },
   "main": "app.js",
   "dependencies": {
+    "aws-sdk": "^2.2.4",
     "bluebird": "^2.9.34",
     "fnv-plus": "^1.2.12",
     "include-all": "^0.1.6",
