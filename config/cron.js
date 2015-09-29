@@ -8,7 +8,7 @@ var Lambda = new AWS.Lambda({ region: 'us-east-1' });
 
 module.exports.cron = {
   cleanupPublicFTP: {
-    schedule: '25 18 * * *',
+    schedule: '40 18 * * *',
     onTick: function() {
       sails.log.info('Cleaning public FTP server...');
       Lambda.invoke({ FunctionName: "fnCleanupPublicFTP" }, function(err, data) {
