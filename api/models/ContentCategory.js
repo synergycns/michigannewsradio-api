@@ -42,6 +42,9 @@ module.exports = {
       type: 'string',
       required: true
     },
+    legacyCurrentFilename: {
+      type: 'string'
+    },
     legacyOutputFolder: {
       type: 'string'
     },
