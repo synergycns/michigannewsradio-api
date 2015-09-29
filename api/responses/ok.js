@@ -8,10 +8,16 @@
  */
 
 module.exports = function (data, code, message, root) {
+
+  var oDate = new Date();
+
   // TODO: make transform camelCase to snake_case
   var response = _.assign({
     code: code || 'OK',
     message: message || 'Operation is successfully executed',
+    dateUTC: oDate.toISOString(),
+    dateLocal: oDate.toString(),
+    timeZone: process.env.TZ,
     data: data || {}
   }, root);
 
