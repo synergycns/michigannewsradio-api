@@ -7,7 +7,7 @@ var fs = require('fs');
 module.exports = {
   port: 443,
   log: {
-    level: 'silly'
+    level: 'error'
   },
   ssl: {
     key: fs.readFileSync('/srv/www/backend/shared/config/ssl.key'),

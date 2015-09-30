@@ -7,7 +7,7 @@ var exec = require('child_process').exec;
 
 module.exports.cron = {
   cleanupPublicFTP: {
-    schedule: '0 21 * * *',
+    schedule: '0 1 * * *',
     onTick: function() {
       sails.log.info('Cleaning public FTP server...');
       var sCommand = "aws lambda invoke --function-name fnCleanupPublicFTP --region us-east-1 /tmp/output.txt";
