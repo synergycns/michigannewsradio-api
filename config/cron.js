@@ -7,7 +7,7 @@ var exec = require('child_process').exec;
 
 module.exports.cron = {
   cleanupPublicFTP: {
-    schedule: '55 20 * * *',
+    schedule: '0 21 * * *',
     onTick: function() {
       sails.log.info('Cleaning public FTP server...');
       var sCommand = "aws lambda invoke --function-name fnCleanupPublicFTP --region us-east-1 /tmp/output.txt";
@@ -15,7 +15,7 @@ module.exports.cron = {
         if(error) {
           sails.log.error('Error cleaning public FTP server!', error);
         } else {
-          sails.log('Public FTP server cleaned successfully!');
+          sails.log.info('Public FTP server cleaned successfully!');
         }
       });
     },
