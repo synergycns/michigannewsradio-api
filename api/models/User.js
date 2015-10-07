@@ -4,10 +4,6 @@ var Promise = require("bluebird");
 /** @module User */
 module.exports = {
 
-  settings: {
-    sortfield: 'createdAt',
-    sortdirection: 'DESC'
-  },
   attributes: {
     firstName: {
       type: 'string',
@@ -56,140 +52,15 @@ module.exports = {
       return user;
     }
   },
-  columns: [
-    {
-      data: 'firstName',
-      title: 'First Name'
-    },
-    {
-      data: 'lastName',
-      title: 'Last Name'
-    },
-    {
-      data: 'username',
-      title: 'Username'
-    },
-    {
-      data: 'email',
-      title: 'Email'
-    },
-    {
-      data: null,
-      title: '',
-      edit: true,
-      sortable: false
-    },
-    {
-      data: null,
-      title: '',
-      delete: true,
-      sortable: false
-    }
-  ],
-  formschema: {
-    type: 'object',
-    title: 'User',
-    properties: {
-      firstName: {
-        title: 'First Name',
-        type: 'string',
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          placeholder: 'First Name',
-          required: true
-        }
-      },
-      lastName: {
-        title: 'Last Name',
-        type: 'string',
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          placeholder: 'Last Name',
-          required: true
-        }
-      },
-      email: {
-        title: 'Email',
-        type: 'string',
-        pattern: "^\\S+@\\S+\.\\S+$",
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          placeholder: 'Email Address',
-          required: true,
-          type: 'unique-property-validator'
-        }
-      },
-      username: {
-        title: 'Username',
-        type: 'string',
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          placeholder: 'Username',
-          required: true,
-          type: 'unique-property-validator'
-        }
-      },
-      password: {
-        title: 'Password',
-        type: 'string',
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          placeholder: 'Username',
-          required: true,
-          type: 'unique-property-validator'
-        }
-      },
-      markets: {
-        title: 'Market',
-        type: 'number',
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          fieldHtmlClass: 'col-sm-10',
-          placeholder: 'Choose Market',
-          required: true,
-          type: 'strapselect',
-          options: {
-            httpGet: {
-              url: 'USE_API:market'
-            },
-            map: {
-              nameProperty: 'name',
-              valueProperty: 'id'
-            }
-          }
-        }
-      },
-      roles: {
-        title: 'Role',
-        type: 'number',
-        'x-schema-form': {
-          labelHtmlClass: 'col-sm-2',
-          fieldHtmlClass: 'col-sm-10',
-          placeholder: 'Choose Role',
-          required: true,
-          type: 'strapselect',
-          options: {
-            httpGet: {
-              url: 'USE_API:role'
-            },
-            map: {
-              nameProperty: 'name',
-              valueProperty: 'id'
-            }
-          }
-        }
-      }
-    }
-  },
   /**
    * Attach default Role to a new User
    */
   afterCreate: [
-    function setOwner (user, next) {
+    function setOwner(user, next) {
       sails.log('User.afterCreate.setOwner', user);
       User
         .update({ id: user.id }, { owner: user.id })
-        .then(function (user) {
+        .then(function () {
           next();
         })
         .catch(function (e) {
@@ -197,7 +68,7 @@ module.exports = {
           next(e);
         });
     },
-    function attachDefaultRole (user, next) {
+    function attachDefaultRole(user, next) {
       Promise.bind({ }, User.findOne(user.id)
           .populate('roles')
           .then(function (user) {
@@ -208,7 +79,7 @@ module.exports = {
             this.user.roles.add(role.id);
             return this.user.save();
           })
-          .then(function (updatedUser) {
+          .then(function () {
             sails.log.silly('role "User" attached to user', this.user.username);
             next();
           })

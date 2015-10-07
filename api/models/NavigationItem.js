@@ -13,16 +13,16 @@ module.exports = {
   attributes: {
     icon: {
       type: 'string',
-      required: true,
+      required: true
     },
     name: {
       type: 'string',
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
     order: {
-      type: 'integer',
+      type: 'integer'
     },
     model: {
       model: 'Model',
@@ -40,15 +40,40 @@ module.exports = {
       }
     });
   },
-  afterValidate: function(item, next) {
-    Model.find(item.model).exec(function(err, model) {
-      if(err) {
-        next(err);
-      } else {
-        item.modelName = model.name;
-        next();
-      }
-    });
-  }
+  beforeUpdate: function(item, next) {
 
+    // Check for "_iModelId" - signifies the model is being updated via the "update" blueprint
+    if(item._iModelId) {
+
+      // Look for item
+      NavigationItem.findOne({ id: item._iModelId })
+        .then(function(oUpdate) {
+
+          // Check if order has changed
+          if(item.order !== oUpdate.order) {
+
+            // Look for record which currently has the item's new order
+            NavigationItem.findOne({ id: { '!': item._iModelId }, order: item.order })
+              .then(function(oPrevious) {
+                if(oPrevious) {
+
+                  // Change the found record's order value to the current item's old order
+                  NavigationItem.update(oPrevious.id, { id: oPrevious.id, order: oUpdate.order})
+                    .then(function(oUpdated) {
+                      next();
+                    });
+
+                // No record found that has the item's new order
+                } else {
+                  next();
+                }
+              });
+
+          // Order has not changed
+          } else {
+            next();
+          }
+        });
+    }
+  }
 };

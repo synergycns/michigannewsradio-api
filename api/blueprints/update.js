@@ -14,6 +14,7 @@ module.exports = function (req, res) {
 
   Model.findOne(PK)
     .then(function(matchingRecord) {
+      values._iModelId = values.id;
       Model
         .update(PK, _.omit(values, 'id'))
         .then(function (records) {
