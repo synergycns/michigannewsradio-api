@@ -8,8 +8,6 @@
 module.exports = {
 
   description: 'Navigation Items',
-  autoPK: true,
-
   attributes: {
     icon: {
       type: 'string',
@@ -45,6 +43,8 @@ module.exports = {
     // Check for "_iModelId" - signifies the model is being updated via the "update" blueprint
     if(item._iModelId) {
 
+      sails.log.info('_iModelId', item._iModelId);
+
       // Look for item
       NavigationItem.findOne({ id: item._iModelId })
         .then(function(oUpdate) {
@@ -52,28 +52,43 @@ module.exports = {
           // Check if order has changed
           if(item.order !== oUpdate.order) {
 
+            sails.log.info('Order changed');
+
             // Look for record which currently has the item's new order
             NavigationItem.findOne({ id: { '!': item._iModelId }, order: item.order })
               .then(function(oPrevious) {
                 if(oPrevious) {
 
-                  // Change the found record's order value to the current item's old order
-                  NavigationItem.update(oPrevious.id, { id: oPrevious.id, order: oUpdate.order})
-                    .then(function(oUpdated) {
-                      next();
-                    });
+                  sails.log.info('Item', oUpdate);
+                  sails.log.info('Previous', oPrevious);
 
+
+                  // Change the found record's order value to the current item's old order
+                  NavigationItem.update(oPrevious.id, { id: oPrevious.id, order: oUpdate.order}).exec(
+                    function(oError, oUpdated) {
+                      if(oError) {
+                        sails.log.error('Error', oError);
+                        next(oError);
+                        return;
+                      }
+
+                      sails.log.info('Updated', oUpdated);
+                      next();
+
+                    }
+                  );
                 // No record found that has the item's new order
                 } else {
                   next();
                 }
               });
-
           // Order has not changed
           } else {
             next();
           }
         });
+    } else {
+      next();
     }
   }
 };

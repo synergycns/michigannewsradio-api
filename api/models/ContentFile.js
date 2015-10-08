@@ -8,9 +8,6 @@
 module.exports = {
 
   description: 'Individual Content Files',
-  autoCreatedBy: false,
-  autoPK: true,
-
   attributes: {
     file: {
       type: 'string',

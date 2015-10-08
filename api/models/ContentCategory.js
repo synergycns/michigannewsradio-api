@@ -8,7 +8,6 @@
 module.exports = {
 
   description: 'Categories of Content',
-  autoPK: true,
   attributes: {
     name: {
       type: 'string',

@@ -8,9 +8,6 @@
 module.exports = {
 
   description: 'Schedule containing spots that should be played on specific dates at specific times',
-  autoPK: true,
-  autoCreatedBy: false,
-
   attributes: {
 
     begin: {

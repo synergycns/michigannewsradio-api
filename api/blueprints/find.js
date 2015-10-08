@@ -51,5 +51,7 @@ module.exports = function (req, res) {
       }];
     })
     .spread(res.ok)
-    .catch(res.serverError);
+    .catch(function(oError) {
+      res.serverError(oError.originalError, oError.originalError.code, oError.details);
+    });
 };

@@ -8,8 +8,6 @@
 module.exports = {
 
   description: 'Commercials to be used with distribution & affidavits',
-  autoPK: true,
-
   attributes: {
     file: {
       type: 'string',

@@ -8,11 +8,7 @@
 module.exports = {
 
   description: 'Scheduled spots and their associated information',
-  autoPK: true,
-  autoCreatedBy: false,
-
   attributes: {
-
     advertiser: {
       type: 'string',
       required: true
