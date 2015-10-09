@@ -27,6 +27,36 @@ module.exports = {
       required: true
     }
   },
+  afterDestroy: function (aoDestroyed, fnNext) {
+
+    sails.log.info('Destroyed', aoDestroyed);
+
+    for(var i = 0; i < aoDestroyed.length; i++)
+    {
+      NavigationItem.find({ where: { order: { '>': aoDestroyed[i].order } }, sort: 'order ASC' })
+        .then(function(aoResults) {
+          if(aoResults && aoResults.length > 0) {
+            sails.log.info('Results', aoResults);
+            var iUpdated = 0;
+            for(var j = 0; j < aoResults.length; j++) {
+              NavigationItem.update(aoResults[j].id, { id: aoResults[j].id, order: (aoResults[j].order - 1) }).exec(function(oError, oUpdated) {
+                if(oError) {
+                  next(oError);
+                } else {
+                  iUpdated++;
+                  if(iUpdated == aoResults.length) {
+                    sails.log.info('All items updated');
+                    fnNext();
+                  }
+                }
+              });
+            }
+          } else {
+            fnNext();
+          }
+        });
+    }
+  },
   beforeCreate: function (item, next) {
     NavigationItem.count().exec(function(err, cnt) {
       if(err) {
@@ -43,7 +73,7 @@ module.exports = {
     // Check for "_iModelId" - signifies the model is being updated via the "update" blueprint
     if(item._iModelId) {
 
-      sails.log.info('_iModelId', item._iModelId);
+      //sails.log.info('_iModelId', item._iModelId);
 
       // Look for item
       NavigationItem.findOne({ id: item._iModelId })
@@ -52,15 +82,15 @@ module.exports = {
           // Check if order has changed
           if(item.order !== oUpdate.order) {
 
-            sails.log.info('Order changed');
+            //sails.log.info('Order changed');
 
             // Look for record which currently has the item's new order
             NavigationItem.findOne({ id: { '!': item._iModelId }, order: item.order })
               .then(function(oPrevious) {
                 if(oPrevious) {
 
-                  sails.log.info('Item', oUpdate);
-                  sails.log.info('Previous', oPrevious);
+                  //sails.log.info('Item', oUpdate);
+                  //sails.log.info('Previous', oPrevious);
 
 
                   // Change the found record's order value to the current item's old order
@@ -72,7 +102,7 @@ module.exports = {
                         return;
                       }
 
-                      sails.log.info('Updated', oUpdated);
+                      //sails.log.info('Updated', oUpdated);
                       next();
 
                     }

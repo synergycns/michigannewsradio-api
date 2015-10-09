@@ -68,6 +68,36 @@ function grantRegisteredPermissions (roles, models, admin) {
   var registeredRole = _.find(roles, { name: 'User' });
   var permissions = [
     {
+      model: _.find(models, { name: 'Commercial' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
+      model: _.find(models, { name: 'ContentCategory' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
+      model: _.find(models, { name: 'ContentFeed' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
+      model: _.find(models, { name: 'ContentFile' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
+      model: _.find(models, { name: 'Schedule' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
+      model: _.find(models, { name: 'ScheduleSpots' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
       model: _.find(models, { name: 'Permission' }).id,
       action: 'read',
       role: registeredRole.id

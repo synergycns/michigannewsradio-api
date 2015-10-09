@@ -6,6 +6,6 @@
 
 module.exports.routes = {
   'get /': 'PingController.index',
-  'post /contentFile/:id/upload': 'ContentFileController.upload',
-  'get /user/:id/permission/:modelid/:action': 'UserController.permission'
+  'get /user/:id/permission/:modelid/:action': 'UserController.permission',
+  'post /contentFile/:id/upload': 'ContentFileController.upload'
 };
