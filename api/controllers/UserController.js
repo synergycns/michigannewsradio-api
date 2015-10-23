@@ -28,7 +28,7 @@ module.exports = {
           });
 
       })
-      .catch(function(e) {
+      .catch(function() {
         return res.badRequest(null, null, 'Could not find the User specified!');
       });
   }
