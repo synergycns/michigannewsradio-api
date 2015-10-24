@@ -88,6 +88,11 @@ function grantRegisteredPermissions (roles, models, admin) {
       role: registeredRole.id
     },
     {
+      model: _.find(models, { name: 'Download' }).id,
+      action: 'read',
+      role: registeredRole.id
+    },
+    {
       model: _.find(models, { name: 'NavigationItem' }).id,
       action: 'read',
       role: registeredRole.id

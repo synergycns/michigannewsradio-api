@@ -54,6 +54,10 @@ module.exports = {
     files: {
       collection: 'ContentFile',
       via: 'category'
+    },
+    downloads: {
+      collection: 'Download',
+      via: 'category'
     }
   }
 };

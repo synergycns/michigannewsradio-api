@@ -37,6 +37,10 @@ module.exports = {
     },
     feed: {
       model: 'ContentFeed'
+    },
+    downloads: {
+      collection: 'Download',
+      via: 'file'
     }
   }
 

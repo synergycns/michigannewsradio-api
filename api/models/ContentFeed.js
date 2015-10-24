@@ -34,6 +34,10 @@ module.exports = {
     files: {
       collection: 'ContentFile',
       via: 'feed'
+    },
+    downloads: {
+      collection: 'Download',
+      via: 'feed'
     }
   }
 };
