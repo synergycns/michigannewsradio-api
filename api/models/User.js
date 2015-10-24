@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var Promise = require("bluebird");
+var oCrypto = require('crypto');
 
 /** @module User */
 module.exports = {
@@ -46,9 +47,49 @@ module.exports = {
     socialProfiles: {
       type: 'object'
     },
+    /* Start FTP-specific fields */
+    accessed: {
+      type: 'datetime'
+    },
+    count: {
+      defaultsTo: 0,
+      type: 'integer'
+    },
+    gid: {
+      defaultsTo: 503,
+      required: true,
+      type: 'integer'
+    },
+    homedir: {
+      defaultsTo: '/mnt/mnrftproot',
+      required: true,
+      type: 'string'
+    },
+    modified: {
+      type: 'datetime'
+    },
+    passwd: {
+      type: 'string'
+    },
+    shell: {
+      defaultsTo: '/sbin/nologin',
+      required: true,
+      type: 'string'
+    },
+    uid: {
+      defaultsTo: 501,
+      required: true,
+      type: 'integer'
+    },
+    userid: {
+      type: 'string'
+    },
+    /* End FTP-specific fields */
     toJSON: function () {
       var user = this.toObject();
       delete user.password;
+      delete user.passwd;
+      delete user.userid;
       return user;
     }
   },
@@ -94,13 +135,20 @@ module.exports = {
     if (_.isEmpty(user.username)) {
       user.username = user.email;
     }
+    var sPlainPassword = user.password;
+    var sMD5Password = oCrypto.createHash('md5').update(sPlainPassword).digest('hex');
+    user.passwd = sMD5Password;
     user.password = HashService.bcrypt.hashSync(user.password);
+    user.userid = user.username;
     next();
   },
   beforeUpdate: function (values, next) {
     if(values.password) {
       var blnIsHash = HashService.isBCryptHash(values.password);
       if(!blnIsHash) {
+        var sPlainPassword = values.password;
+        var sMD5Password = oCrypto.createHash('md5').update(sPlainPassword).digest('hex');
+        values.passwd = sMD5Password;
         values.password = HashService.bcrypt.hashSync(values.password);
       }
     }

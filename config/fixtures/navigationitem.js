@@ -6,7 +6,7 @@ exports.create = function (models) {
   var modelcontent, modelnav, modelusers, modelmarket;
   models.forEach(function(model) {
     switch (model.identity) {
-      case 'contentfeed':
+      case 'contentcategory':
             modelcontent = model;
             break;
       case 'navigationitem':
@@ -20,7 +20,7 @@ exports.create = function (models) {
             break;
     }
   });
-  return NavigationItem.findOrCreate({ name: 'Content' }, { icon: 'fa-music', name: 'Content', model: modelcontent })
+  return NavigationItem.findOrCreate({ name: 'Programs' }, { icon: 'fa-music', name: 'Content', model: modelcontent })
     .then(function() {
       NavigationItem.findOrCreate({ name: 'Markets'}, { icon: 'fa-gear', name: 'Markets', model: modelmarket })
         .then(function() {
