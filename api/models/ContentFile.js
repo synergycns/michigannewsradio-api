@@ -52,6 +52,8 @@ module.exports = {
         sails.log.error('Temporary file could not be found (create)', oContentFile.oTmpFile);
         fnNext({ message: 'Temporary file could not be found' });
       }
+    } else {
+      fnNext();
     }
   },
   beforeUpdate: function(oContentFile, fnNext) {
@@ -62,6 +64,8 @@ module.exports = {
         sails.log.error('Temporary file could not be found (update)', oContentFile.oTmpFile);
         fnNext({ message: 'Temporary file could not be found' });
       }
+    } else {
+      fnNext();
     }
   },
   fnPublishTmpFile: function(oContentFile, fnNext) {
