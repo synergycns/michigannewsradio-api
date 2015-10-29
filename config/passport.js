@@ -83,7 +83,6 @@ function _onLocalStrategyAuth(req, identifier, password, next) {
 
   User
     .findOne(query)
-    .populate('roles')
     .then(function (user) {
       if (!user) return next(null, null, {
         code: 'E_USER_NOT_FOUND',
@@ -110,7 +109,6 @@ function _onLocalStrategyAuth(req, identifier, password, next) {
 function _onJwtStrategyAuth(req, payload, next) {
   User
     .findOne({id: payload.user.id})
-    .populate('roles')
     .then(function (user) {
       if (!user) return next(null, null, {
         code: 'E_USER_NOT_FOUND',
@@ -147,7 +145,6 @@ function _onSocialStrategyAuth(req, accessToken, refreshToken, profile, next) {
 
     User
       .findOrCreate(criteria, model)
-      .populate('roles')
       .then(function (user) {
         if (!user) return next(null, null, {
           code: 'E_AUTH_FAILED',
