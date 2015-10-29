@@ -72,11 +72,13 @@ function grantRegisteredPermissions (roles, models, admin) {
       action: 'read',
       role: registeredRole.id
     },
+    /*
     {
       model: _.find(models, { name: 'ContentCategory' }).id,
       action: 'read',
       role: registeredRole.id
     },
+    */
     {
       model: _.find(models, { name: 'ContentFeed' }).id,
       action: 'read',
