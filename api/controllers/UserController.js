@@ -3,6 +3,8 @@
  *
  * @description :: Server-side logic for managing users
  */
+var _ = require('lodash');
+var oPromise = require('bluebird');
 
 module.exports = {
   listpermissions: function(req, res) {
@@ -15,52 +17,71 @@ module.exports = {
       .populate('permissions')
       .then(function(oUser) {
 
-        //sails.log.info('Found user', oUser);
+        // Create promise
+        var oDefer = oPromise.defer();
 
-        // Setup return array for permissions
-        var aoReturnPermissions = [];
-
-        // Check for user-specific permissions & add to return
+        // Check for user-specific permissions to populate
         if(oUser.permissions.length) {
-          oUser.permissions.forEach(function(oUserPermission) {
-            aoReturnPermissions.push(oUserPermission);
-          });
+          Permission.find({ id: _.pluck(oUser.permissions, 'id') })
+            .populate('criteria')
+            .then(function(aoPermissions) {
+              oUser.permissions = aoPermissions;
+              oDefer.resolve(oUser);
+            })
+            .catch(function (oError) {
+              sails.log.error('[UserController:listpermissions]', oError);
+              oDefer.reject(oError);
+            })
+        } else {
+          oDefer.resolve(oUser);
         }
 
-        // Setup array for role id(s)
-        var aoRoleIds = [];
+        return oDefer.promise;
 
-        // Setup array for role id(s)
-        oUser.roles.forEach(function(oRole) {
-          aoRoleIds.push(oRole.id);
-        });
+      })
+      .then(function(oUser) {
+
+        // Create promise
+        var oDefer = oPromise.defer();
 
         // Get Role(s)
-        Role.find(aoRoleIds)
+        Role.find({ id: _.pluck(oUser.roles, 'id') })
           .populate('permissions')
           .then(function(aoRolesPopulated) {
 
             //sails.log.info('Populated roles', aoRolesPopulated);
+            oUser.roles = aoRolesPopulated;
 
-            // Iterate roles
-            aoRolesPopulated.forEach(function(oRolePopulated) {
-              // Check for role-specific permissions & add to return
-              if(oRolePopulated.permissions.length) {
-                oRolePopulated.permissions.forEach(function(oRolePermission) {
-                  aoReturnPermissions.push(oRolePermission);
-                });
-              }
+            // Setup array to hold all permissions
+            var aoRolePermissions = [];
+
+            // Iterate Roles, get each Role's permissions and add to array
+            _.each(aoRolesPopulated, function(oRolePopulated) {
+              _.each(oRolePopulated.permissions, function(oRolePermission) {
+                aoRolePermissions.push(oRolePermission);
+              })
             });
 
-            // Return
-            return res.ok({ aoPermissions: aoReturnPermissions });
+            //sails.log.info('Permissions for Role(s)', aoRolePermissions);
 
+            Permission.find({ id: _.pluck(aoRolePermissions, 'id') })
+              .populate('criteria')
+              .then(function(aoPermissionsPopulated) {
+                oUser.permissions = _.union(oUser.permissions, aoPermissionsPopulated);
+                oDefer.resolve(oUser);
+              });
           })
           .catch(function(oError) {
             sails.log.error('[UserController:listpermissions]', oError);
-            return res.negotiate(oError);
-          })
+            oDefer.reject(oError);
+          });
 
+        return oDefer.promise;
+
+      })
+      .then(function(oUser) {
+        // Return
+        return res.ok({ aoPermissions: oUser.permissions });
       })
       .catch(function(oError) {
         sails.log.error('[UserController:listpermissions]', oError);
