@@ -55,6 +55,7 @@ module.exports = {
      * delete privileges.
      */
     role: {
+      index: true,
       model: 'Role',
       // Validate manually
       //required: true
@@ -65,6 +66,7 @@ module.exports = {
      * delete privileges.
      */
     user: {
+      index: true,
       model: 'User'
       // Validate manually
     },

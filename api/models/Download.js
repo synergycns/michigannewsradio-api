@@ -12,20 +12,24 @@ module.exports = {
   attributes: {
     category: {
       model: 'ContentCategory',
+      index: true,
       required: true
     },
     feed: {
       model: 'ContentFeed',
+      index: true,
       required: true
     },
     file: {
       model: 'ContentFile',
+      index: true,
       required: true
     },
     ipAddress: {
       type: 'string'
     },
     user: {
+      index: true,
       model: 'User'
     }
   }
