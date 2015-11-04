@@ -57,8 +57,8 @@ module.exports = {
     }
   },
   beforeUpdate: function(oContentFile, fnNext) {
-    if(oContentFile.oTmpFile) {
-      if(oFs.statSync(oContentFile.TmpFile.fd).isFile()) {
+    if(oContentFile.oTmpFile && oContentFile.oTmpFile.hasOwnProperty('fd')) {
+      if(oFs.statSync(oContentFile.oTmpFile.fd).isFile()) {
         this.fnPublishTmpFile(oContentFile, fnNext);
       } else {
         sails.log.error('Temporary file could not be found (update)', oContentFile.oTmpFile);
