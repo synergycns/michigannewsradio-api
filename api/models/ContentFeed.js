@@ -39,6 +39,20 @@ module.exports = {
       collection: 'Download',
       via: 'feed'
     }
+  },
+  afterDestroy: function(aoDestroyed, fnNext) {
+    for(var i = 0; i < aoDestroyed.length; i++) {
+      // Find associated files
+      ContentFile.find({ feed: aoDestroyed[i].id })
+        .then(function(aoResults) {
+          if(aoResults.length) {
+            for(var i = 0; i < aoResults.length; i++) {
+              aoResults[i].destroy();
+            }
+          }
+        });
+    }
+    fnNext();
   }
 };
 

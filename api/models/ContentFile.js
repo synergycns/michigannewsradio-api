@@ -44,6 +44,15 @@ module.exports = {
       via: 'file'
     }
   },
+  afterDestroy: function(aoDestroyed, fnNext) {
+    for(var i = 0; i < aoDestroyed.length; i++) {
+      if(aoDestroyed[i].file.substr(aoDestroyed[i].file.length - 3).toLowerCase() == 'mp3') {
+        StorageService.remove('mnrdistribution:' + aoDestroyed[i].file.substr(0, aoDestroyed[i].file.length - 3) + 'wav');
+      }
+      StorageService.remove('mnrdistribution:' + aoDestroyed[i].file);
+    }
+    fnNext();
+  },
   beforeCreate: function(oContentFile, fnNext) {
     if(oContentFile.oTmpFile) {
       if(oFs.statSync(oContentFile.oTmpFile.fd).isFile()) {
@@ -69,6 +78,17 @@ module.exports = {
     }
   },
   fnPublishTmpFile: function(oContentFile, fnNext) {
+
+    // Remove old file
+    if(oContentFile.file && oContentFile.file !== 'oTmpFile') {
+      if(oContentFile.file.substr(oContentFile.file.length - 3).toLowerCase() == 'mp3') {
+        sails.log.info('Removing wav: ' + oContentFile.file);
+        StorageService.remove('mnrdistribution:' + oContentFile.file.substr(0, oContentFile.file.length - 3) + 'wav');
+      }
+      sails.log.info('Removing: ' + oContentFile.file);
+      StorageService.remove('mnrdistribution:' + oContentFile.file);
+    }
+
     // Get the category
     ContentCategory.findOne(oContentFile.category)
       .then(function(oDestinationCategory) {
