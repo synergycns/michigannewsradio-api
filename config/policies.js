@@ -32,6 +32,28 @@ module.exports.policies = {
     '*': true
   },
 
+  ContentFeedController: {
+    'activity': [
+      'isAuthenticated',
+      'ModelPolicy',
+      'AuditPolicy',
+      'OwnerPolicy',
+      'PermissionPolicy',
+      'RolePolicy'
+    ]
+  },
+
+  ContentFileController: {
+    'activity': [
+      'isAuthenticated',
+      'ModelPolicy',
+      'AuditPolicy',
+      'OwnerPolicy',
+      'PermissionPolicy',
+      'RolePolicy'
+    ]
+  },
+
   PingController: {
     '*': true
   }

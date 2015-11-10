@@ -9,8 +9,6 @@
 
 module.exports = function (data, code, message, root) {
 
-  var oDate = new Date();
-
   // TODO: make transform camelCase to snake_case
   var response = _.assign({
     code: code || 'OK',

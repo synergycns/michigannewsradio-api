@@ -5,6 +5,8 @@
  * Verify that the User fulfills permission 'where' conditions and attribute blacklist restrictions
  */
 var wlFilter = require('waterline-criteria');
+var Promise = require('bluebird');
+var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
 
 module.exports = function(req, res, next) {
   var permissions = req.permissions;
@@ -43,6 +45,8 @@ module.exports = function(req, res, next) {
   PermissionService.findTargetObjects(req)
     .then(function(objects) {
 
+      sails.log.info('Target objects', objects);
+
       // attributes are not important for a delete request
       if (action === 'delete') {
         body = undefined;
@@ -69,18 +73,19 @@ function bindResponsePolicy(req, res, criteria) {
 }
 
 function responsePolicy(criteria, _data, options) {
-  sails.log.info('responsePolicy');
   var req = this.req;
   var res = this.res;
   var user = req.owner;
   var method = PermissionService.getMethod(req);
   var isResponseArray = _.isArray(_data);
+  var where = actionUtil.parseCriteria(req);
+  var limit = actionUtil.parseLimit(req);
+  var skip = actionUtil.parseSkip(req);
+  var Model = actionUtil.parseModel(req);
+  var countQuery = Model.count(where);
+  var totalQuery = Model.count();
 
   var data = isResponseArray ? _data : [_data];
-
-  sails.log.silly('data', data);
-  sails.log.silly('options', options);
-  sails.log.silly('criteria!', criteria);
 
   var permitted = data.reduce(function(memo, item) {
     criteria.some(function(crit) {
@@ -104,11 +109,24 @@ function responsePolicy(criteria, _data, options) {
     return memo;
   }, []);
 
+
   if (permitted.length === 0) {
     sails.log.silly('permitted.length === 0');
     return res.send(404);
   } else if (isResponseArray) {
-    return res._ok(permitted, options);
+    Promise.all([countQuery, totalQuery])
+      .then(function (_count, _total) {
+        return res._ok(permitted, null, null, {
+          criteria: where,
+          limit: limit,
+          start: skip,
+          end: skip + limit,
+          total: _count[0],
+          draw: 1,
+          recordsTotal: _total,
+          recordsFiltered: _count[0]
+        });
+      });
   } else {
     res._ok(permitted[0], options);
   }

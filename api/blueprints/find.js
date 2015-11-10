@@ -52,6 +52,6 @@ module.exports = function (req, res) {
     })
     .spread(res.ok)
     .catch(function(oError) {
-      res.serverError(oError.originalError, oError.originalError.code, oError.details);
+      res.serverError(oError.originalError, oError.originalError.code || 500, oError.details);
     });
 };
