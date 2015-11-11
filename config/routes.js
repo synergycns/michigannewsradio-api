@@ -6,6 +6,7 @@
 
 module.exports.routes = {
   'get /': 'PingController.index',
+  'post /commercial/uploadtmpfile': 'CommercialController.fnUploadTmpFile',
   'get /contentfeed/activity': 'ContentFeedController.activity',
   'get /contentfile/activity': 'ContentFileController.activity',
   'get /user/listpermissions': 'UserController.listpermissions',
