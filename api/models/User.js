@@ -4,7 +4,6 @@ var oCrypto = require('crypto');
 
 /** @module User */
 module.exports = {
-
   attributes: {
     firstName: {
       type: 'string',
@@ -31,9 +30,8 @@ module.exports = {
       type: 'string',
       required: true
     },
-    markets: {
-      collection: 'Market',
-      via: 'users'
+    market: {
+      model: 'Market'
     },
     roles: {
       collection: 'Role',

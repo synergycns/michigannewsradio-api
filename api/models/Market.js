@@ -6,7 +6,6 @@
  */
 
 module.exports = {
-
   description: 'Markets for Stations/Users',
   attributes: {
     commercials: {
@@ -21,7 +20,7 @@ module.exports = {
     },
     users: {
       collection: 'User',
-      via: 'markets'
+      via: 'market'
     }
   }
 
