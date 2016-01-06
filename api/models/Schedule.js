@@ -7,9 +7,10 @@
 
 module.exports = {
 
+  //migrate: 'alter',
+
   description: 'Schedule containing spots that should be played on specific dates at specific times',
   attributes: {
-
     begin: {
       type: 'datetime',
       required: true
@@ -31,6 +32,9 @@ module.exports = {
       via: 'schedule'
     }
 
+  },
+  afterDestroy: function(aoDestroyed, fnCallback) {
+    ScheduleSpots.destroy({ schedule: _.pluck(aoDestroyed, 'id') }).exec(fnCallback);
   }
 
 };

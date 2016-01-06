@@ -7,6 +7,8 @@
 
 module.exports = {
 
+  //migrate: 'alter',
+
   description: 'Scheduled spots and their associated information',
   attributes: {
     advertiser: {
@@ -15,7 +17,8 @@ module.exports = {
     },
     commercial: {
       model: 'Commercial',
-      required: true
+      //required: true
+      required: false
     },
     date: {
       type: 'date',
@@ -43,10 +46,6 @@ module.exports = {
       type: 'integer',
       required: true,
       size: 2
-    },
-    file: {
-      model: 'ContentFile',
-      required: true
     },
     schedule: {
       model: 'Schedule',

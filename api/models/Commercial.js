@@ -8,11 +8,17 @@ var oFs = require('fs');
 
 module.exports = {
 
+  //migrate: 'alter',
+
   description: 'Commercials to be used with distribution & affidavits',
   attributes: {
     file: {
       type: 'string',
       required: true
+    },
+    isPSA: {
+      type: 'boolean',
+      defaultsTo: false
     },
     name: {
       type: 'string',
