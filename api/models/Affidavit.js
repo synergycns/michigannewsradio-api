@@ -17,7 +17,7 @@ module.exports = {
     },
     user: {
       model: 'User',
-      require: true
+      required: true
     },
     makeGoods : {
       collection: 'MakeGood',
