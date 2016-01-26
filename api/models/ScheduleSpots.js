@@ -47,6 +47,10 @@ module.exports = {
       required: true,
       size: 2
     },
+    program: {
+      type: 'string',
+      required: true
+    },
     schedule: {
       model: 'Schedule',
       required: true
