@@ -73,9 +73,6 @@ function initializeFixtures (sails) {
     .then(function (admin) {
       return require('../../config/fixtures/permission').create(this.roles, this.models, admin);
     })
-    .then(function() {
-      return require('../../config/fixtures/market').create(this.models);
-    })
     .catch(function (error) {
       sails.log.error(error);
     });

@@ -65,8 +65,49 @@ function grantAdminPermissions (roles, models, admin) {
 }
 
 function grantRegisteredPermissions (roles, models, admin) {
+  sails.log.info(_.find(models, { name: 'Affidavit' }).id);
   var registeredRole = _.find(roles, { name: 'User' });
   var permissions = [
+    {
+      model: _.find(models, { name: 'Affidavit' }).id,
+      action: 'read',
+      role: registeredRole.id,
+      relation: 'owner'
+    },
+    {
+      model: _.find(models, { name: 'Affidavit' }).id,
+      action: 'update',
+      role: registeredRole.id,
+      relation: 'owner'
+    },
+    {
+      model: _.find(models, { name: 'Affidavit' }).id,
+      action: 'create',
+      role: registeredRole.id
+    },
+    {
+      model: _.find(models, { name: 'MakeGood' }).id,
+      action: 'read',
+      role: registeredRole.id,
+      relation: 'owner'
+    },
+    {
+      model: _.find(models, { name: 'MakeGood' }).id,
+      action: 'update',
+      role: registeredRole.id,
+      relation: 'owner'
+    },
+    {
+      model: _.find(models, { name: 'MakeGood' }).id,
+      action: 'create',
+      role: registeredRole.id,
+    },
+    {
+      model: _.find(models, { name: 'MakeGood' }).id,
+      action: 'delete',
+      role: registeredRole.id,
+      relation: 'owner'
+    },
     {
       model: _.find(models, { name: 'Commercial' }).id,
       action: 'read',
