@@ -26,6 +26,14 @@ module.exports = {
       return oRes.serverError(sMessage, 500, sMessage);
     }
 
+    // Check for temporary folders
+    if(!fs.statSync('./.tmp').isDirectory()) {
+      fs.mkdirSync('./.tmp');
+      fs.mkdirSync('./.tmp/pdf');
+    } else if(!fs.statSync('./.tmp/pdf').isDirectory()) {
+      fs.mkdirSync('./.tmp/pdf');
+    }
+
     // Get the schedule
     Schedule.findOne(PK).populate('spots').exec(function(oError, oSchedule) {
       if(oError) {
