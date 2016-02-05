@@ -103,7 +103,7 @@ module.exports = {
           .then(function(oUploadedFTP) {
 
             sails.log.info('Uploaded to FTP: ', oUploadedFTP);
-            oFs.unlink(oContentFile.oTmpFile.fd);
+            oFs.unlink(oCommercial.oTmpFile.fd);
             fnNext();
           })
           .catch(function(oError) {
