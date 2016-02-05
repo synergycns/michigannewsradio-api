@@ -28,7 +28,7 @@ module.exports = {
 
     // Check for temporary folders
     fs.stat('./.tmp', function(oError) {
-      if(oError && oError.errno === 34) {
+      if(oError && oError.code == 'ENOENT') {
         fs.mkdirSync('./.tmp');
       }
     });
