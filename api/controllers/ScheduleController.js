@@ -27,12 +27,11 @@ module.exports = {
     }
 
     // Check for temporary folders
-    if(!fs.statSync('./.tmp').isDirectory()) {
-      fs.mkdirSync('./.tmp');
-      fs.mkdirSync('./.tmp/pdf');
-    } else if(!fs.statSync('./.tmp/pdf').isDirectory()) {
-      fs.mkdirSync('./.tmp/pdf');
-    }
+    fs.stat('./.tmp', function(oError) {
+      if(oError && oError.errno === 34) {
+        fs.mkdirSync('./.tmp');
+      }
+    });
 
     // Get the schedule
     Schedule.findOne(PK).populate('spots').exec(function(oError, oSchedule) {
@@ -57,7 +56,7 @@ module.exports = {
             var aFilenames = [];
 
             // Loop users and generate PDFs for each
-            async.each(aoUsers, function(oUser, fnCallback) {
+            async.eachSeries(aoUsers, function(oUser, fnCallback) {
 
               // Setup options
               var oOptions = {};
@@ -92,22 +91,44 @@ module.exports = {
                 sails.log.error('Error generating PDF', oError);
                 return oRes.negotiate(oError);
               } else {
-                // Use pdfconcat to concat temp files then pipe to response
-                var oDate = new Date();
-                var sOutputFile = './.tmp/' + oDate.getTime() + '.pdf';
-                pdfconcat(aFilenames, sOutputFile, function(oError) {
-                  if(oError) {
-                    sails.log.error(oError);
-                  } else {
 
-                    // Remove temporary files
-                    aFilenames.forEach(function(sFilename) {
-                      fs.unlink(sFilename);
-                    });
+                // Handle single temp file
+                if(aoUsers.length == 1) {
 
-                    return fs.createReadStream(sOutputFile).pipe(base64.encode()).pipe(oRes);
-                  }
-                });
+                  // Create stream
+                  var oMerged = fs.createReadStream(aFilenames[0]);
+                  oMerged.on('end', function () {
+                    fs.unlink(aFilenames[0]);
+                  });
+
+                  // Output
+                  return oMerged.pipe(base64.encode()).pipe(oRes);
+                } else {
+
+                  // Use pdfconcat to concat multiple temp files then pipe to response
+                  var oDate = new Date();
+                  var sOutputFile = './.tmp/' + oDate.getTime() + '.pdf';
+                  pdfconcat(aFilenames, sOutputFile, function (oError) {
+                    if (oError) {
+                      sails.log.error(oError);
+                    } else {
+
+                      // Remove temporary files
+                      aFilenames.forEach(function (sFilename) {
+                        fs.unlink(sFilename);
+                      });
+
+                      // Create stream
+                      var oMerged = fs.createReadStream(sOutputFile);
+                      oMerged.on('end', function () {
+                        fs.unlink(sOutputFile);
+                      });
+
+                      // Output
+                      return oMerged.pipe(base64.encode()).pipe(oRes);
+                    }
+                  });
+                }
               }
             });
           }
