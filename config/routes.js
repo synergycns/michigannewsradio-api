@@ -10,6 +10,7 @@ module.exports.routes = {
   'get /contentfeed/activity': 'ContentFeedController.activity',
   'get /contentfile/activity': 'ContentFileController.activity',
   'get /schedule/pdf': 'ScheduleController.pdf',
+  'get /schedule/merge': 'ScheduleController.merge',
   'get /user/listpermissions': 'UserController.listpermissions',
   'post /contentfile/uploadtmpfile': 'ContentFileController.fnUploadTmpFile'
 };

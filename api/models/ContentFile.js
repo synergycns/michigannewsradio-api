@@ -127,6 +127,7 @@ module.exports = {
                     StorageService
                       .upload(oContentFile.oTmpFile.fd, 'mnrftproot' + ':' + oDestinationCategory.legacyOutputFolder + '/Current/' + oDestinationCategory.legacyCurrentFilename + '.mp3')
                       .then(function() {
+                        oFs.unlink(oContentFile.oTmpFile.fd);
                         fnNext();
                       })
                       .catch(function(oError) {
@@ -135,6 +136,7 @@ module.exports = {
                       });
 
                   } else {
+                    oFs.unlink(oContentFile.oTmpFile.fd);
                     fnNext();
                   }
                 })
@@ -143,6 +145,7 @@ module.exports = {
                   fnNext(oError);
                 });
             } else {
+              oFs.unlink(oContentFile.oTmpFile.fd);
               fnNext();
             }
           })
