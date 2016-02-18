@@ -56,6 +56,13 @@ module.exports = {
     var oSchedule = oOptions.oSchedule;
     var oUser = oOptions.oUser;
 
+    // Sort spots
+    oSchedule.spots.sort(function(oItemA, oItemB) {
+      if(oItemA.datetime < oItemB.datetime) { return -1; }
+      if(oItemA.datetime > oItemB.datetime) { return 1; }
+      return 0;
+    });
+
     // Setup week strings
     var sWeekBegin = ('0' + oSchedule.begin.getMonth() + 1).slice(-2) + '/' + ('0' + oSchedule.begin.getDate()).slice(-2) + '/' + oSchedule.begin.getFullYear();
     var sWeekEnd = ('0' + oSchedule.end.getMonth() + 1).slice(-2) + '/' + ('0' + oSchedule.end.getDate()).slice(-2) + '/' + oSchedule.end.getFullYear();
