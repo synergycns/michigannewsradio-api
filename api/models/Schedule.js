@@ -120,6 +120,15 @@ module.exports = {
         color: '#676A6C'
       },
       styles: {
+        blue: {
+          color: '#23C6C8'
+        },
+        bold: {
+          bold: true
+        },
+        green: {
+          color: '#18A689'
+        },
         header: {
           fontSize: 18,
           bold: true
@@ -136,7 +145,7 @@ module.exports = {
           bold: true
         },
         subheader: {
-          color: '#18A689',
+          color: '#23C6C8',
           fontSize: 16,
           bold: true
         },
@@ -291,11 +300,20 @@ module.exports = {
 
       // Iterate spots
       oTimeSlot.aoDates.forEach(function(oTimeSlotDate, iIndex) {
-        var sText = '';
+        var aText = [];
         oTimeSlotDate.aoSpots.forEach(function(oSpot) {
-          sText += oSpot.advertiser + '\n';
+          aText = [
+            {
+              text: oSpot.advertiser + "\n",
+              style: ['tableHeader']
+            },
+            {
+              text: '- ' + oSpot.material + ' (:' + oSpot.length + ')',
+              style: ['tableText', 'bold', 'green']
+            }
+          ]
         });
-        aRow[iIndex + 1] = { text: sText, style: 'tableText' };
+        aRow[iIndex + 1] = { text: aText };
       });
       oTable.body.push(aRow);
     });
@@ -369,7 +387,18 @@ module.exports = {
                 // Populate row and add to table
                 oTable.body.push([
                   { text: dateFormat(oSchedule.spots[i].datetime, 'ddd mm/dd h TT'), style: 'tableText' },
-                  { text: oSchedule.spots[i].advertiser, style: 'tableText' },
+                  {
+                    text: [
+                      {
+                        text: oSchedule.spots[i].advertiser + "\n",
+                        style: ['tableHeader']
+                      },
+                      {
+                        text: '- ' + oSchedule.spots[i].material + ' (:' + oSchedule.spots[i].length + ')',
+                        style: ['tableText', 'bold', 'green']
+                      }
+                    ]
+                  },
                   { text: (oMakeGood.didNotAir) ? 'Did NOT Run: ' + oMakeGood.reason : 'Ran as Make Good on: ' + dateFormat(oMakeGood.datetime, 'ddd mm/dd h TT'), style: (oMakeGood.didNotAir) ? ['tableText', 'important'] : 'tableText' }
                 ]);
                 break;
