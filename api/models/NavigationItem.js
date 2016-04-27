@@ -39,7 +39,7 @@ module.exports = {
             sails.log.info('Results', aoResults);
             var iUpdated = 0;
             for(var j = 0; j < aoResults.length; j++) {
-              NavigationItem.update(aoResults[j].id, { id: aoResults[j].id, order: (aoResults[j].order - 1) }).exec(function(oError, oUpdated) {
+              NavigationItem.update(aoResults[j].id, { id: aoResults[j].id, order: (aoResults[j].order - 1) }).exec(function(oError) {
                 if(oError) {
                   next(oError);
                 } else {
