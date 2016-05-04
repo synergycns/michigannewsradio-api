@@ -14,6 +14,8 @@ function _onPassportAuth(req, res, error, user, info) {
   if (error) return res.serverError(error);
   if (!user) return res.unauthorized(null, info && info.code, info && info.message);
 
+  user.sIPAddress = req.headers['x-forwarded-for'] || (req.connection && req.connection.remoteAddress) || (req.socket && req.socket.handshake && req.socket.handshake.headers && req.socket.handshake.headers['x-forwarded-for']) || (req.socket && req.socket.handshake && req.socket.handshake.address) || 'Unknown';
+  
   return res.ok({
     token: CipherService.jwt.encodeSync({user: user}),
     user: user
