@@ -13,7 +13,7 @@ module.exports = {
 
     // Handle incoming upload
     req.file('file').upload({
-        maxBytes: 10000000
+        maxBytes: 128000000
       },
       function whenDone(oError, aoUploadedFiles) {
         if (oError) {
