@@ -74,12 +74,17 @@ module.exports = {
       order: [
         'compress',
         'keepAlive',
-        'bodyParser',
+        //'bodyParser',
+        'skipper',
         '$custom',
         'router',
         '404',
         '500'
-      ]
+      ],
+      // Configure Skipper
+      skipper: require('skipper')({
+        limit: '128mb'
+      })
     }
   }
 };
